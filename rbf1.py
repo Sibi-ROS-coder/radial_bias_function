@@ -36,55 +36,55 @@ print("label_train ",type(label_train),"_",label_train_row,label_train_column)
 # print(gpc.score(X, y))
 # print(gpc.predict_proba(X[:2,:]))
 ####################
-class_1 = np.zeros([1,33])
-class_2 = np.zeros([1,33])
-num_class1 = 0
-num_class2 = 0
+# class_1 = np.zeros([1,33])
+# class_2 = np.zeros([1,33])
+# num_class1 = 0
+# num_class2 = 0
 
-i = 0
-for i in range(len(data_train)):
-    if(label_train[i,0] == 1):
-        class_1[0,:] += data_train[i,:]
-        num_class1 += 1
-    else:
-        class_2[0,:] += data_train[i,:]
-        num_class2 += 1
-print("Class_1",num_class1)
-print("Class_2",num_class2)
-central_neuron_1 = class_1/num_class1
-central_neuron_2 = class_2/num_class2
-print("central neuraon",central_neuron_1.shape)
+# i = 0
+# for i in range(len(data_train)):
+#     if(label_train[i,0] == 1):
+#         class_1[0,:] += data_train[i,:]
+#         num_class1 += 1
+#     else:
+#         class_2[0,:] += data_train[i,:]
+#         num_class2 += 1
+# print("Class_1",num_class1)
+# print("Class_2",num_class2)
+# central_neuron_1 = class_1/num_class1
+# central_neuron_2 = class_2/num_class2
+# print("central neuraon",central_neuron_1.shape)
 import math
 def radial_gaussian_function(distance_in_neurons,sigma):
     g_of_d = math.exp((-1.0*distance_in_neurons*distance_in_neurons)/(2*sigma*sigma))
     return g_of_d
-phi = np.zeros([330,2])
+# phi = np.zeros([330,2])
 
-for j in range(len(data_train)):
-    distance_in_neurons_1 = np.linalg.norm(data_train[j] - central_neuron_1)
-    distance_in_neurons_2 = np.linalg.norm(data_train[j] - central_neuron_2)
-    phi[j,0] = radial_gaussian_function(distance_in_neurons_1,0.707)
-    phi[j,1] = radial_gaussian_function(distance_in_neurons_2,0.707)
+# for j in range(len(data_train)):
+#     distance_in_neurons_1 = np.linalg.norm(data_train[j] - central_neuron_1)
+#     distance_in_neurons_2 = np.linalg.norm(data_train[j] - central_neuron_2)
+#     phi[j,0] = radial_gaussian_function(distance_in_neurons_1,0.707)
+#     phi[j,1] = radial_gaussian_function(distance_in_neurons_2,0.707)
     
-print("PHI",phi.shape)
-weights = np.matmul(np.linalg.pinv([phi]),label_train)
-# print("weights",weights)
-f_of_x = np.matmul(phi,weights)
-# print("f_of_x",f_of_x[0,:,0])
+# print("PHI",phi.shape)
+# weights = np.matmul(np.linalg.pinv([phi]),label_train)
+# # print("weights",weights)
+# f_of_x = np.matmul(phi,weights)
+# # print("f_of_x",f_of_x[0,:,0])
 
-ijk = 0
-correct = 0
-for ijk in range(len(data_train)):
-    # tmp1= round(f_of_x[0,ijk,0] - label_train[ijk,0])
-    if(f_of_x[0,ijk,0] < 0 ):
-        tmp1 = -1
-    else:
-        tmp1 = 1
-    # print(f_of_x[0,ijk,0] - label_train[ijk,0])
-    if ((tmp1 == -1 and label_train[ijk,0] ==-1 ) or ((tmp1 == 0 or tmp1 == 1 ) and label_train[ijk,0] == 1)):
-        correct +=1
-print("Acccuracy",100*(correct/len(data_train)))
-print("wrong",len(data_train)-correct)
+# ijk = 0
+# correct = 0
+# for ijk in range(len(data_train)):
+#     # tmp1= round(f_of_x[0,ijk,0] - label_train[ijk,0])
+#     if(f_of_x[0,ijk,0] < 0 ):
+#         tmp1 = -1
+#     else:
+#         tmp1 = 1
+#     # print(f_of_x[0,ijk,0] - label_train[ijk,0])
+#     if ((tmp1 == -1 and label_train[ijk,0] ==-1 ) or ((tmp1 == 0 or tmp1 == 1 ) and label_train[ijk,0] == 1)):
+#         correct +=1
+# print("Acccuracy",100*(correct/len(data_train)))
+# print("wrong",len(data_train)-correct)
 
 from scipy.spatial import distance
 import random
@@ -95,7 +95,7 @@ def weight_calculation(train_dataset,train_label_dataset,number_of_centres):
     PHI_1 = np.zeros([len(train_dataset),number_of_centres])
     for i_1 in range(number_of_centres):
         central_neuron_id = round(random.random() *len(data_train))
-        print(central_neuron_id)
+        # print("randomly chose the neurons",central_neuron_id)
         central_neurons[i_1,:]  = train_dataset[central_neuron_id,:]
     # abc = distance.euclidean(train_dataset,central_neurons)
     
@@ -110,10 +110,10 @@ def weight_calculation(train_dataset,train_label_dataset,number_of_centres):
             
             sigma = d_max/(number_of_centres**0.5)
             PHI_1[i_2,i_3] = radial_gaussian_function(d_distance,sigma)
-    print(d_max)
+    # print("Max_distace",d_max)
     # print("distance",distance_in_neurons)
     weights_final = np.matmul(np.linalg.pinv([PHI_1]),train_label_dataset)
-    print("weights",weights_final)
+    # print("weights",weights_final)
     f_of_x_1 = np.matmul(PHI_1,weights_final)
     # print("f_of_x",f_of_x[0,:,0])
 
@@ -129,6 +129,6 @@ def weight_calculation(train_dataset,train_label_dataset,number_of_centres):
         if ((tmp3 == -1 and train_label_dataset[ijk_1,0] ==-1 ) or ((tmp3 == 0 or tmp3 == 1 ) and train_label_dataset[ijk_1,0] == 1)):
             correct_1 +=1
     print("Acccuracy",100*(correct_1/len(train_dataset)))
-    print("wrong",len(train_dataset)-correct_1)
-
-weight_calculation(data_train,label_train,10)
+    # print("wrong",len(train_dataset)-correct_1)
+centres = input("Enter the number of Central neurons to be considered ")
+weight_calculation(data_train,label_train,int(centres))
